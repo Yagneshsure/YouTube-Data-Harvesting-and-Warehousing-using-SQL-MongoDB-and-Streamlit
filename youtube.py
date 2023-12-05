@@ -199,4 +199,28 @@ def get_playlist_info(channel_id):
     return Playlist_Data
 
 
-######################################################### 
+######################################################### Mongo DB ############################################
+
+# Connecting to Mongodb
+client = pymongo.MongoClient("mongodb+srv://yagneshsure10:9591083438@cluster0.fvyb8ub.mongodb.net/?retryWrites=true&w=majority")
+
+db = client["Youtube_data"] # Creating a new database named youtube
+
+
+# Uploding data to mongodb
+
+def channel_details(channel_id):
+    ch_details = get_channel_info(channel_id)
+    pl_details = get_playlist_info(channel_id)
+    vi_ids = get_videos_ids(channel_id)
+    vi_info = get_video_info(vi_ids)
+    cm_info = get_comment_info(vi_ids)
+    
+    coll1 = db["channel_details"]
+    coll1.insert_one({"Channel_information":ch_details, "Playlist_information":pl_details, "Video_Ids" : vi_ids, 
+                            ":Video_information":vi_info, "Comment_information" : cm_info })
+    
+    return "Upload completed successfully"
+
+
+################################################## 
